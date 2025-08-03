@@ -285,82 +285,30 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const formData = new FormData(this);
-            const name = formData.get('name').trim();
-            const email = formData.get('email').trim();
-            const subject = formData.get('subject').trim();
-            const message = formData.get('message').trim();
-            
-            // Enhanced validation
-            let isValid = true;
-            const errors = [];
-            
-            if (!name) {
-                errors.push('Name is required');
-                isValid = false;
-            }
-            
-            if (!email) {
-                errors.push('Email is required');
-                isValid = false;
-            } else if (!isValidEmail(email)) {
-                errors.push('Please enter a valid email address');
-                isValid = false;
-            }
-            
-            if (!subject) {
-                errors.push('Subject is required');
-                isValid = false;
-            }
-            
-            if (!message) {
-                errors.push('Message is required');
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                showAdvancedNotification(errors.join('<br>'), 'error');
-                return;
-            }
-            
-            // Enhanced form submission animation
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Message...';
-            submitBtn.disabled = true;
-            submitBtn.style.background = 'rgba(0, 212, 170, 0.2)';
-            submitBtn.style.transform = 'scale(0.95)';
-            
-            // Animate entire form
-            this.style.opacity = '0.6';
-            this.style.transform = 'scale(0.98)';
-            this.style.filter = 'blur(1px)';
-            
-            // Simulate form submission
-            setTimeout(() => {
-                showAdvancedNotification(`Thank you, ${name}! Your message has been received. I'll get back to you soon at ${email}.`, 'success');
-                this.reset();
-                
-                // Reset form styles
-                formInputs.forEach(input => {
-                    input.style.borderColor = '';
+            const formData = {
+                name: contactForm.name.value,
+                email: contactForm.email.value,
+                subject: contactForm.subject.value,
+                message: contactForm.message.value
+            };
+            try {
+                const response = await fetch('http://localhost:5000/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
                 });
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                submitBtn.style.background = '';
-                submitBtn.style.transform = '';
-                
-                // Reset form
-                this.style.opacity = '1';
-                this.style.transform = 'scale(1)';
-                this.style.filter = '';
-            }, 2500);
+                const result = await response.json();
+                if (result.success) {
+                    alert('Message sent!');
+                    contactForm.reset();
+                } else {
+                    alert('Failed to send message: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error sending message.');
+            }
         });
     }
 
@@ -763,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fixed travel stats animation to prevent placeholder display
     function animateFixedTravelStats() {
         const statNumbers = document.querySelectorAll('.stat-number');
-        const expectedValues = ['14', '4', 'Hill Stations', 'Adventure'];
+        const expectedValues = ['17', '4', 'Hill Stations', 'Adventure'];
         
         statNumbers.forEach((target, index) => {
             const expectedValue = expectedValues[index];
