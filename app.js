@@ -668,6 +668,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Updated travel destinations array with Varkala added
+    const updatedDestinations = [
+        // ... your existing 14 destinations ...
+        {
+            name: "Varkala",
+            state: "Kerala",
+            type: "Cliff Beach",
+            nickname: "Pearl of Arabian Sea",
+            description: "Unique cliff beach with red sandstone cliffs, pristine golden sands, and spectacular sunsets over Arabian Sea",
+            highlights: ["Varkala Cliff", "Papanasam Beach", "Janardhana Swamy Temple", "Natural Springs", "Sunset Views"],
+            coordinates: [8.7379, 76.7163],
+            experience: "A bohemian paradise where ancient cliffs meet the Arabian Sea - perfect blend of spirituality, adventure, and relaxation"
+        }
+    ];
+
+    // Updated travel stats
+    const updatedTravelStats = {
+        placesVisited: 15, // Updated from 14 to 15
+        statesCovered: 4,  // Still 4 states (Kerala already included)
+        favoriteType: "Hill stations, Waterfalls & Cliff Beaches",
+        travelStyle: "Adventure & Spiritual Tourism"
+    };
+
     // Advanced particle system with multiple types
     function createAdvancedParticleSystem() {
         const particlesContainer = document.createElement('div');
